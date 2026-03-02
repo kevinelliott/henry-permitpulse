@@ -4,7 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import type { User, SupabaseClient } from "@supabase/supabase-js";
 
-const supabase = createBrowserClient();
+let _supabase: ReturnType<typeof createBrowserClient> | null = null;
+function getSupabase() {
+  if (!_supabase) _supabase = createBrowserClient();
+  return _supabase;
+}
+const supabase = typeof window !== "undefined" ? getSupabase() : null as unknown as ReturnType<typeof createBrowserClient>;
 
 // ========== TYPES ==========
 interface Business { id: string; name: string; industry: string; state_code: string; }

@@ -16,6 +16,12 @@ async function seed() {
   const email = "demo@permitpulse.com";
   const password = "Password123!";
   
+  const { data: userData, error: userError } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  
   let userId;
   if (userError) {
     if (userError.message === "A user with this email address has already been registered") {

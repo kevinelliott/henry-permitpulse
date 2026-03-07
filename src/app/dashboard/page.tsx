@@ -95,12 +95,10 @@ export default function DashboardPage() {
     const { data: user } = await supabase.auth.getUser();
     if (!user.user) { router.push("/auth"); return; }
 
-    const [profileRes, permitsRes, employeesRes, certsRes] = await Promise.all([
-      supabase.from("profiles").select("*").eq("id", user.user.id).single(),
-      supabase.from("permits").select("*").eq("user_id", user.user.id).order("expiry_date"),
-      supabase.from("employees").select("*").eq("user_id", user.user.id),
-      supabase.from("certifications").select("*").eq("user_id", user.user.id),
-    ]);
+    const profileRes: any = await supabase.from("profiles").select("*").eq("id", user.user.id).single();
+    const permitsRes: any = await supabase.from("permits").select("*").eq("user_id", user.user.id).order("expiry_date");
+    const employeesRes: any = await supabase.from("employees").select("*").eq("user_id", user.user.id);
+    const certsRes: any = await supabase.from("certifications").select("*").eq("user_id", user.user.id);
 
     if (profileRes.data) setProfile(profileRes.data);
     else if (!profileRes.error) router.push("/onboarding");
